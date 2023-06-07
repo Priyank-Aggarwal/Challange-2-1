@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .container{
+            margin: 0;
+            padding: 0;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            display: flex;
+            justify-content:space-between;
+
+        }
+        .part2{
+            display: flex;
+
+        }
+        .ipaddress{
+            width: 200px;
+        }
+        .part1{
+            margin-top: 100px;
+            margin-left: 40px;
+        }
+        button{
+            background-color: rgb(36, 160, 32);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+    <div class="part1">
+        <label for="url-input">Enter URL</label>
+        <input type="url" id="url-input">
+        <button onclick="checkEmbedding()">Submit</button>
+        <div id="result-container"></div>
+    </div>
+    <div class="part2">
+        <iframe src="https://www.preschoolsnearme.com/" width="400px" height="800px" frameborder="0"></iframe>
+        <div class="ipaddress">
+            <h3>Ip Address</h3>
+            <p id="ip"></p>
+        </div>
+    </div>
+    </div>
+     <script>
+        fetch('https://api.ipify.org/?format=json')
+            .then(response => response.json())
+            .then(data => {
+                const ipAddress = data.ip;
+                const ipElement = document.getElementById('ip');
+                ipElement.textContent = ipAddress;
+            })
+            .catch(error => {
+                console.log('Error fetching IP address:', error);
+            });
+    </script>
+     <script>
+    function checkEmbedding() {
+      var input = document.getElementById("url-input").value;
+      var resultContainer = document.getElementById("result-container");
+      var iframe = document.createElement("iframe");
+      iframe.style.display = "none";
+      document.body.appendChild(iframe);
+      iframe.src = input;
+      iframe.onload = function() {
+        var canEmbed = iframe.contentDocument !== null;
+        resultContainer.innerHTML = canEmbed
+          ? "The URL can be embedded inside another webpage."
+          : "The URL cannot be embedded inside another webpage."; 
+        document.body.removeChild(iframe);
+      };
+    }
+  </script>
+</body>
+</html>
